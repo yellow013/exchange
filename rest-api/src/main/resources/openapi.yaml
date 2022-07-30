@@ -1,0 +1,71 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: REST API
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+paths:
+  /healthcheck:
+    get:
+      summary: Check service health
+      operationId: healthcheck
+      tags:
+        - healthcheck
+      responses:
+        '200':
+          description: Health checkin'
+  /auth:
+    get:
+      summary: Basic Authentication
+      operationId: auth
+      security:
+        - basicAuth: []
+      tags:
+        - auth
+      responses:
+        '200':
+          description: Autheticated
+        '401':
+          description: Unauthorized
+  /balances:
+    get:
+      summary: Account balances
+      operationId: balances
+      security:
+        - basicAuth: []
+      tags:
+        - balances
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /products:
+    get:
+      summary: Tradeable products
+      operationId: products
+      security:
+        - basicAuth: []
+      tags:
+        - products
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /placeOrder:
+    post:
+      summary: Place order
+      operationId: placeOrder
+      security:
+        - basicAuth: []
+      tags:
+        - place
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized

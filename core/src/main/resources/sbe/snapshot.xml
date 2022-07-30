@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbe:messageSchema xmlns:sbe="http://fixprotocol.io/2016/sbe"
+                   xmlns:xi="http://www.w3.org/2001/XInclude"
+                   package="baseline"
+                   id="1"
+                   version="0"
+                   semanticVersion="5.2"
+                   description="Example base schema which can be extended.">
+    <xi:include href="common-types.xml"/>
+    <types>
+        <enum name="Side" encodingType="uint8" description="Side of an order">
+            <validValue name="BID" description="Bid or buy order side">1</validValue>
+            <validValue name="ASK" description="Ask or sell order side">2</validValue>
+        </enum>
+        <enum name="OrderType" encodingType="uint8" description="Side of an order">
+            <validValue name="LMT" description="Limit order.">1</validValue>
+            <validValue name="MKT" description="Market order.">2</validValue>
+        </enum>
+        <enum name="OrderStatus" encodingType="uint8" description="order status">
+            <validValue name="NEW" description="">1</validValue>
+            <validValue name="FILLED" description="">2</validValue>
+            <validValue name="PARTIALLY_FILLED" description="">3</validValue>
+            <validValue name="REJECTED" description="">4</validValue>
+            <validValue name="CANCELLED" description="">5</validValue>
+        </enum>
+        <type name="AssetSymbol" primitiveType="char" length="3" characterEncoding="ASCII"/>
+        <type name="Username" primitiveType="char" length="20" characterEncoding="ASCII"/>
+        <type name="Password" primitiveType="char" length="20" characterEncoding="ASCII"/>
+        <type name="ClientOrderId" primitiveType="char" length="20" characterEncoding="ASCII"/>
+    </types>
+
+    <!--    ExchangeState (used for cluster snapshots)-->
+    <sbe:message name="ExchangeState" id="999" description="Binary representation of exchange state.">
+        <group name="users" id="1">
+            <field name="userId" id="2" type="uint64"/>
+            <field name="username" id="3" type="Username"/>
+            <field name="password" id="4" type="Password"/>
+        </group>
+        <group name="balances" id="5">
+            <field name="userId" id="6" type="uint64"/>
+            <field name="assetId" id="7" type="uint64"/>
+            <field name="balance" id="8" type="uint64"/>
+        </group>
+        <group name="assets" id="9">
+            <field name="assetId" id="10" type="uint64"/>
+            <field name="symbol" id="11" type="AssetSymbol"/>
+            <field name="scale" id="12" type="int8"/>
+        </group>
+        <group name="products" id="13">
+            <field name="productId" id="14" type="uint64"/>
+            <field name="baseAssetId" id="15" type="uint64"/>
+            <field name="baseSymbol" id="16" type="AssetSymbol"/>
+            <field name="baseScale" id="17" type="int8"/>
+            <field name="counterAssetId" id="18" type="uint64"/>
+            <field name="counterSymbol" id="19" type="AssetSymbol"/>
+            <field name="counterScale" id="20" type="int8"/>
+            <field name="makerFee" id="21" type="int64"/>
+            <field name="takerFee" id="22" type="int64"/>
+        </group>
+        <group name="orderBooks" id="23">
+            <field name="productId" id="24" type="uint64"/>
+            <field name="currentOrderId" id="25" type="uint64"/>
+            <field name="currentExecutionId" id="26" type="uint64"/>
+            <group name="bids" id="27">
+                <field name="clientOrderId" id="28" type="ClientOrderId"/>
+                <field name="orderId" id="29" type="uint64"/>
+                <field name="userId" id="30" type="uint64"/>
+                <field name="productId" id="31" type="uint64"/>
+                <field name="orderStatus" id="32" type="OrderStatus"/>
+                <field name="orderType" id="33" type="OrderType"/>
+                <field name="side" id="34" type="Side"/>
+                <field name="price" id="35" type="uint64"/>
+                <field name="amount" id="36" type="uint64"/>
+            </group>
+            <group name="asks" id="37">
+                <field name="clientOrderId" id="38" type="ClientOrderId"/>
+                <field name="orderId" id="39" type="uint64"/>
+                <field name="userId" id="40" type="uint64"/>
+                <field name="productId" id="41" type="uint64"/>
+                <field name="orderStatus" id="42" type="OrderStatus"/>
+                <field name="orderType" id="43" type="OrderType"/>
+                <field name="side" id="44" type="Side"/>
+                <field name="price" id="45" type="uint64"/>
+                <field name="amount" id="46" type="uint64"/>
+            </group>
+        </group>
+        <group name="clientOrderIds" id="47">
+            <field name="userId" id="48" type="uint64"/>
+            <field name="clientOrderId" id="49" type="ClientOrderId"/>
+        </group>
+    </sbe:message>
+</sbe:messageSchema>

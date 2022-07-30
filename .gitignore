@@ -1,0 +1,12 @@
+# Project exclude paths
+.gradle/
+build/
+node_modules/
+/out/
+/out/production/classes/
+.idea
+src/main/generated
+aeron-cluster-*
+hs_err_pid*
+/logs/*
+geth.log
