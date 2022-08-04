@@ -13,6 +13,7 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BasicAuthHandler;
 import io.vertx.ext.web.handler.CorsHandler;
 import io.vertx.ext.web.openapi.RouterBuilder;
+import lob.exchange.config.rest.RestApiConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,12 +27,14 @@ public class RestApiVerticle extends AbstractVerticle
     private final String openApiPath;
     private final TradingRequests tradingRequests;
     private final AdminClient adminClient;
+    private final RestApiConfig restApiConfig;
 
-    public RestApiVerticle(final String openApiPath, final TradingRequests tradingRequests, final AdminClient adminClient)
+    public RestApiVerticle(final String openApiPath, final TradingRequests tradingRequests, final AdminClient adminClient, final RestApiConfig restApiConfig)
     {
         this.openApiPath = openApiPath;
         this.tradingRequests = tradingRequests;
         this.adminClient = adminClient;
+        this.restApiConfig = restApiConfig;
     }
 
     @Override
@@ -44,10 +47,8 @@ public class RestApiVerticle extends AbstractVerticle
             .map(this::registerCorsPolicy)
             .onSuccess(routerBuilder -> {
                 final Router router = routerBuilder.createRouter();
-
                 final HttpServer server = vertx
-                    // TODO: configure
-                    .createHttpServer(new HttpServerOptions().setPort(8081).setHost("0.0.0.0"))
+                    .createHttpServer(new HttpServerOptions().setPort(restApiConfig.getPort()).setHost("0.0.0.0"))
                     .requestHandler(router);
 
                 server.listen()

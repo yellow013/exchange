@@ -71,7 +71,7 @@ public class RestApiMain
         aeronic.awaitUntilPubsAndSubsConnect();
 
         final Vertx vertx = Vertx.vertx();
-        vertx.deployVerticle(new RestApiVerticle(openApiPath, tradingRequests, adminClient)).result();
+        vertx.deployVerticle(new RestApiVerticle(openApiPath, tradingRequests, adminClient, restApiConfig)).result();
 
         LOGGER.info("Verticle deployed");
 
