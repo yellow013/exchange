@@ -22,10 +22,6 @@
         <type name="length" primitiveType="uint32" maxValue="1073741824"/>
         <type name="varData" primitiveType="uint8" length="0"/>
     </composite>
-    <enum name="BooleanType" encodingType="uint8" description="Boolean Type.">
-        <validValue name="F" description="False value representation.">0</validValue>
-        <validValue name="T" description="True value representation.">1</validValue>
-    </enum>
     <composite name="Decimal" description="fixed-precision scaled float">
         <type name="value" primitiveType="int64"/>
         <type name="scale" primitiveType="uint8"/>
