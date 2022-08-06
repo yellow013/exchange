@@ -7,6 +7,7 @@ This project presents a reference implementation of an exchange. It leverages a 
 * [Artio](https://github.com/real-logic/artio): FIX Gateway
 * [Vert.x](https://vertx.io/): Market Data WS API + REST API
 * [React](https://reactjs.org/): Admin UI + Trading UI
+* [SBE](https://github.com/real-logic/simple-binary-encoding) (Simple Binary Encoding): Aeron Cluster Snapshotting
 * [Selenide](https://selenide.org/): UI acceptance tests
 
 ## Quickstart
