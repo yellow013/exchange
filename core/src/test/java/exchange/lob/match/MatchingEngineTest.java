@@ -1,12 +1,12 @@
 package exchange.lob.match;
 
-import exchange.lob.api.codecs.internal.*;
+import exchange.lob.domain.OrderStatus;
+import exchange.lob.domain.OrderType;
+import exchange.lob.domain.Side;
 import exchange.lob.events.trading.NoOpOrderBookEvents;
 import exchange.lob.match.execution.ExecutionSettler;
 import exchange.lob.product.Asset;
 import exchange.lob.product.Product;
-import org.agrona.ExpandableDirectByteBuffer;
-import org.agrona.MutableDirectBuffer;
 import org.agrona.collections.MutableLong;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,6 @@ import static exchange.lob.match.MatchingEngineTestUtils.orderEntry;
 import static exchange.lob.match.MatchingEngineTestUtils.orderWithId;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class MatchingEngineTest
@@ -56,88 +55,6 @@ public class MatchingEngineTest
         Product product = Product.builder().productId(0L).build();
         matchingEngine.onAddProduct(product.getProductId());
         assertThat(matchingEngine.orderBooks).containsExactly(orderBookEntry(product));
-    }
-
-    @Test
-    public void shouldEncodeAndDecodeEmptySnapshot()
-    {
-        MutableDirectBuffer buffer = new ExpandableDirectByteBuffer(4096);
-        ExchangeStateEncoder exchangeStateEncoder = new ExchangeStateEncoder().wrap(buffer, 0);
-
-        MatchingEngine.CODEC.encodeState(matchingEngine, exchangeStateEncoder);
-        ExchangeStateDecoder exchangeStateDecoder = new ExchangeStateDecoder().wrap(buffer, 0, 0, 0);
-        MatchingEngine decodedMatchingEngine = MatchingEngine.CODEC.decodeState(exchangeStateDecoder);
-
-        assertEquals(matchingEngine, decodedMatchingEngine);
-    }
-
-    @Test
-    public void shouldEncodeAndDecodeNonEmptySnapshot()
-    {
-        MutableDirectBuffer buffer = new ExpandableDirectByteBuffer(4096);
-        ExchangeStateEncoder exchangeStateEncoder = new ExchangeStateEncoder().wrap(buffer, 0);
-
-        Product product = createTestProduct(0L);
-
-        matchingEngine.onAddProduct(product.getProductId());
-
-        matchingEngine.handleOrderPlacement(
-            1L,
-            "order1",
-            1L,
-            product,
-            OrderType.LMT,
-            Side.BID,
-            100L,
-            100L,
-            Long.MAX_VALUE,
-            executionSettler
-        );
-
-        matchingEngine.handleOrderPlacement(
-            1L,
-            "order2",
-            2L,
-            product,
-            OrderType.LMT,
-            Side.ASK,
-            100L,
-            100L,
-            Long.MAX_VALUE,
-            executionSettler
-        );
-
-        matchingEngine.handleOrderPlacement(
-            1L,
-            "order3",
-            3L,
-            product,
-            OrderType.LMT,
-            Side.BID,
-            50L,
-            100L,
-            Long.MAX_VALUE,
-            executionSettler
-        );
-
-        matchingEngine.handleOrderPlacement(
-            1L,
-            "order4",
-            4L,
-            product,
-            OrderType.LMT,
-            Side.ASK,
-            200L,
-            100L,
-            Long.MAX_VALUE,
-            executionSettler
-        );
-
-        MatchingEngine.CODEC.encodeState(matchingEngine, exchangeStateEncoder);
-        ExchangeStateDecoder exchangeStateDecoder = new ExchangeStateDecoder().wrap(buffer, 0, 0, 0);
-        MatchingEngine decodedMatchingEngine = MatchingEngine.CODEC.decodeState(exchangeStateDecoder);
-
-        assertEquals(matchingEngine, decodedMatchingEngine);
     }
 
     @Test

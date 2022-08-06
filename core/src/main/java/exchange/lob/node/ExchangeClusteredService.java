@@ -1,8 +1,8 @@
 package exchange.lob.node;
 
 import exchange.lob.Exchange;
-import exchange.lob.api.codecs.internal.ExchangeStateDecoder;
-import exchange.lob.api.codecs.internal.ExchangeStateEncoder;
+import exchange.lob.api.sbe.ExchangeStateDecoder;
+import exchange.lob.api.sbe.ExchangeStateEncoder;
 import exchange.lob.events.admin.AdminRequestProcessor;
 import exchange.lob.events.trading.OrderBookEvents;
 import exchange.lob.events.trading.TradingRequestProcessor;

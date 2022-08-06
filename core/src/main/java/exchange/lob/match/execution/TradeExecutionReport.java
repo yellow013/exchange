@@ -1,15 +1,15 @@
 package exchange.lob.match.execution;
 
-import exchange.lob.api.codecs.internal.OrderType;
-import exchange.lob.api.codecs.internal.Side;
+import exchange.lob.domain.OrderType;
 import exchange.lob.domain.RejectionReason;
+import exchange.lob.domain.Side;
 import exchange.lob.match.Order;
 import exchange.lob.product.Product;
 import org.agrona.collections.Long2LongHashMap;
 import org.agrona.collections.Long2ObjectHashMap;
 
-import static exchange.lob.api.codecs.internal.OrderType.MKT;
-import static exchange.lob.api.codecs.internal.Side.BID;
+import static exchange.lob.domain.OrderType.MKT;
+import static exchange.lob.domain.Side.BID;
 import static exchange.lob.user.UserService.EXCHANGE_USER_ID;
 
 public class TradeExecutionReport implements ExecutionReport

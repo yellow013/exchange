@@ -96,7 +96,7 @@ tasks {
             Pair("sbe.validation.stop.on.error", "true"),
             Pair("sbe.xinclude.aware", "true"),
             Pair("sbe.validation.xsd", validationXsdPath),
-            Pair("sbe.target.namespace", "exchange.lob.api.codecs.internal")
+            Pair("sbe.target.namespace", "exchange.lob.api.sbe")
         )
         args("src/main/resources/sbe/snapshot.xml")
     }

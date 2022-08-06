@@ -1,6 +1,6 @@
 package exchange.lob.product;
 
-import exchange.lob.api.codecs.internal.Side;
+import exchange.lob.domain.Side;
 import io.aeronic.codec.BufferDecoder;
 import io.aeronic.codec.BufferEncoder;
 import io.aeronic.codec.DecodedBy;
@@ -8,8 +8,8 @@ import io.aeronic.codec.Encodable;
 
 import java.util.Objects;
 
-import static exchange.lob.api.codecs.internal.Side.ASK;
-import static exchange.lob.api.codecs.internal.Side.BID;
+import static exchange.lob.domain.Side.ASK;
+import static exchange.lob.domain.Side.BID;
 import static exchange.lob.math.Quantiser.toMajorUnits;
 import static exchange.lob.math.Quantiser.toMinorUnits;
 

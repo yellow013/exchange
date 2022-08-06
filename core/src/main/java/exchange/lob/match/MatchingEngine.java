@@ -1,10 +1,10 @@
 package exchange.lob.match;
 
-import exchange.lob.api.codecs.internal.ExchangeStateDecoder;
-import exchange.lob.api.codecs.internal.ExchangeStateEncoder;
-import exchange.lob.api.codecs.internal.OrderType;
-import exchange.lob.api.codecs.internal.Side;
+import exchange.lob.api.sbe.ExchangeStateDecoder;
+import exchange.lob.api.sbe.ExchangeStateEncoder;
+import exchange.lob.domain.OrderType;
 import exchange.lob.domain.RejectionReason;
+import exchange.lob.domain.Side;
 import exchange.lob.events.trading.OrderBookEvents;
 import exchange.lob.match.execution.ExecutionSettler;
 import exchange.lob.match.execution.RejectionExecutionReport;
@@ -143,7 +143,7 @@ public class MatchingEngine
             executionId,
             product.getSymbol(),
             userId,
-            exchange.lob.domain.Side.fromSbe(side),
+            exchange.lob.domain.Side.get(side.value()),
             exchange.lob.domain.RejectionReason.DUPLICATE_ORDER
         );
 
@@ -243,9 +243,9 @@ public class MatchingEngine
                         bidDecoder.clientOrderId(),
                         bidDecoder.userId(),
                         productId,
-                        bidDecoder.orderStatus(),
-                        bidDecoder.orderType(),
-                        bidDecoder.side(),
+                        exchange.lob.domain.OrderStatus.get(bidDecoder.orderStatus().value()),
+                        exchange.lob.domain.OrderType.get(bidDecoder.orderType().value()),
+                        exchange.lob.domain.Side.get(bidDecoder.side().value()),
                         bidDecoder.price(),
                         bidDecoder.amount()
                     );
@@ -261,9 +261,9 @@ public class MatchingEngine
                         askDecoder.clientOrderId(),
                         askDecoder.userId(),
                         productId,
-                        askDecoder.orderStatus(),
-                        askDecoder.orderType(),
-                        askDecoder.side(),
+                        exchange.lob.domain.OrderStatus.get(askDecoder.orderStatus().value()),
+                        exchange.lob.domain.OrderType.get(askDecoder.orderType().value()),
+                        exchange.lob.domain.Side.get(askDecoder.side().value()),
                         askDecoder.price(),
                         askDecoder.amount()
                     );

@@ -1,7 +1,7 @@
 package exchange.lob.match.execution;
 
-import exchange.lob.api.codecs.internal.Side;
 import exchange.lob.domain.RejectionReason;
+import exchange.lob.domain.Side;
 import exchange.lob.product.Product;
 import org.agrona.collections.Long2LongHashMap;
 import org.agrona.collections.Long2ObjectHashMap;

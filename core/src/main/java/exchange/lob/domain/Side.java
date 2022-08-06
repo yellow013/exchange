@@ -14,25 +14,25 @@ import static java.util.stream.Collectors.toMap;
 public enum Side implements Encodable
 {
 
-    BID('1'),
-    ASK('2'),
-    NULL_VAL('3');
+    BID((short)1),
+    ASK((short)2),
+    NULL_VAL((short)255);
 
-    private static final Map<Character, Side> VALUES = Arrays.stream(values()).collect(toMap(Side::value, Function.identity()));
+    private static final Map<Short, Side> VALUES = Arrays.stream(values()).collect(toMap(Side::value, Function.identity()));
 
-    private final char value;
+    private final short value;
 
-    Side(final char value)
+    Side(final short value)
     {
         this.value = value;
     }
 
-    public char value()
+    public short value()
     {
         return value;
     }
 
-    public static Side get(final char value)
+    public static Side get(final short value)
     {
         final Side side = VALUES.get(value);
 
@@ -53,27 +53,7 @@ public enum Side implements Encodable
     @DecodedBy
     public static Side decode(final BufferDecoder bufferDecoder)
     {
-        final char value = bufferDecoder.decodeChar();
+        final short value = bufferDecoder.decodeShort();
         return Side.get(value);
     }
-
-    public exchange.lob.api.codecs.internal.Side toSbe()
-    {
-        return switch (this)
-            {
-                case BID -> exchange.lob.api.codecs.internal.Side.BID;
-                case ASK -> exchange.lob.api.codecs.internal.Side.ASK;
-                case NULL_VAL -> exchange.lob.api.codecs.internal.Side.NULL_VAL;
-            };
-    }
-
-    public static Side fromSbe(final exchange.lob.api.codecs.internal.Side side)
-    {
-        return switch (side)
-            {
-                case BID -> BID;
-                case ASK -> ASK;
-                case NULL_VAL -> NULL_VAL;
-            };
-    };
 }

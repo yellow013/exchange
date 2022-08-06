@@ -1,7 +1,7 @@
 package exchange.lob.product;
 
-import exchange.lob.api.codecs.internal.ExchangeStateDecoder;
-import exchange.lob.api.codecs.internal.ExchangeStateEncoder;
+import exchange.lob.api.sbe.ExchangeStateDecoder;
+import exchange.lob.api.sbe.ExchangeStateEncoder;
 import exchange.lob.domain.ExchangeResponseCode;
 import exchange.lob.node.Stateful;
 import exchange.lob.node.client.response.AddAssetResponse;

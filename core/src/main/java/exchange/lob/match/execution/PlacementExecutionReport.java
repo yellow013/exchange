@@ -1,7 +1,7 @@
 package exchange.lob.match.execution;
 
-import exchange.lob.api.codecs.internal.Side;
 import exchange.lob.domain.RejectionReason;
+import exchange.lob.domain.Side;
 import exchange.lob.product.Product;
 import org.agrona.collections.Long2LongHashMap;
 import org.agrona.collections.Long2ObjectHashMap;
@@ -9,8 +9,6 @@ import org.agrona.collections.Long2ObjectHashMap;
 public class PlacementExecutionReport implements ExecutionReport
 {
     private final long executionId;
-    private final long orderId;
-    private final long filled;
     private final Side side;
     private final long price;
     private final long amount;
@@ -18,17 +16,13 @@ public class PlacementExecutionReport implements ExecutionReport
 
     public PlacementExecutionReport(
         final long executionId,
-        final long orderId,
         final Side side,
         final long price,
         final long amount,
-        final long filled,
         final Product product
     )
     {
         this.executionId = executionId;
-        this.orderId = orderId;
-        this.filled = filled;
         this.side = side;
         this.price = price;
         this.amount = amount;

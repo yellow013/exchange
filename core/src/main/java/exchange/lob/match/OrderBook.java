@@ -1,10 +1,10 @@
 package exchange.lob.match;
 
-import exchange.lob.api.codecs.internal.ExchangeStateEncoder;
-import exchange.lob.api.codecs.internal.OrderStatus;
-import exchange.lob.api.codecs.internal.OrderType;
-import exchange.lob.api.codecs.internal.Side;
+import exchange.lob.api.sbe.ExchangeStateEncoder;
+import exchange.lob.domain.OrderStatus;
+import exchange.lob.domain.OrderType;
 import exchange.lob.domain.RejectionReason;
+import exchange.lob.domain.Side;
 import exchange.lob.events.trading.OrderBookEvents;
 import exchange.lob.match.execution.*;
 import exchange.lob.product.Product;
@@ -18,10 +18,10 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Objects;
 
-import static exchange.lob.api.codecs.internal.OrderType.LMT;
-import static exchange.lob.api.codecs.internal.OrderType.MKT;
-import static exchange.lob.api.codecs.internal.Side.ASK;
-import static exchange.lob.api.codecs.internal.Side.BID;
+import static exchange.lob.domain.OrderType.LMT;
+import static exchange.lob.domain.OrderType.MKT;
+import static exchange.lob.domain.Side.ASK;
+import static exchange.lob.domain.Side.BID;
 import static exchange.lob.match.util.Sides.other;
 import static it.unimi.dsi.fastutil.longs.LongComparators.NATURAL_COMPARATOR;
 import static it.unimi.dsi.fastutil.longs.LongComparators.OPPOSITE_COMPARATOR;
@@ -107,7 +107,8 @@ public class OrderBook
         {
             case BID -> bid(correlationId, clientOrderId, product, userId, orderType, price, amount, reservedBalance, executionSettler);
             case ASK -> ask(correlationId, clientOrderId, product, userId, orderType, price, amount, reservedBalance, executionSettler);
-            case NULL_VAL -> {
+            case NULL_VAL ->
+            {
             }
         }
     }
@@ -258,10 +259,10 @@ public class OrderBook
                 currentExecutionId.get(),
                 makerOrder.getUserId(),
                 userId,
-                exchange.lob.domain.OrderStatus.fromSbe(makerOrderStatus),
-                exchange.lob.domain.OrderStatus.fromSbe(takerOrderStatus),
+                makerOrderStatus,
+                takerOrderStatus,
                 product,
-                exchange.lob.domain.Side.fromSbe(side),
+                exchange.lob.domain.Side.get(side.value()),
                 makerOrder.getPrice(),
                 product.getCounterAsset().getScale(),
                 depleteBy,
@@ -293,7 +294,7 @@ public class OrderBook
                 productId,
                 orderStatus,
                 orderType,
-                side,
+                exchange.lob.domain.Side.get(side.value()),
                 price,
                 toFill
             );
@@ -312,8 +313,8 @@ public class OrderBook
                 currentExecutionId.get(),
                 userId,
                 currentOrderId.get(),
-                exchange.lob.domain.OrderStatus.fromSbe(orderStatus),
-                exchange.lob.domain.Side.fromSbe(side),
+                orderStatus,
+                exchange.lob.domain.Side.get(side.value()),
                 price,
                 product.getCounterAsset().getScale(),
                 toFill,
@@ -322,10 +323,8 @@ public class OrderBook
 
             final PlacementExecutionReport executionReport = new PlacementExecutionReport(
                 currentExecutionId.get(),
-                currentOrderId.get(),
                 side,
                 price,
-                toFill,
                 filledAmount,
                 product
             );
@@ -415,7 +414,7 @@ public class OrderBook
                 currentExecutionId.get(),
                 product.getSymbol(),
                 userId,
-                exchange.lob.domain.Side.fromSbe(side),
+                exchange.lob.domain.Side.get(side.value()),
                 exchange.lob.domain.RejectionReason.INSUFFICIENT_LIQUIDITY
             );
 
@@ -495,10 +494,10 @@ public class OrderBook
             correlationId,
             order.getClientOrderId(),
             currentExecutionId.get(),
-            exchange.lob.domain.OrderStatus.fromSbe(orderStatus),
+            orderStatus,
             userId,
             product.getSymbol(),
-            exchange.lob.domain.Side.fromSbe(side),
+            exchange.lob.domain.Side.get(side.value()),
             order.getPrice(),
             product.getCounterAsset().getScale(),
             amount,
@@ -520,9 +519,9 @@ public class OrderBook
             .orderId(order.getOrderId())
             .productId(order.getProductId())
             .userId(order.getUserId())
-            .orderStatus(order.getOrderStatus())
-            .orderType(order.getOrderType())
-            .side(order.getSide())
+            .orderStatus(exchange.lob.api.sbe.OrderStatus.get(order.getOrderStatus().value()))
+            .orderType(exchange.lob.api.sbe.OrderType.get(order.getOrderType().value()))
+            .side(exchange.lob.api.sbe.Side.get(order.getSide().value()))
             .price(order.getPrice())
             .amount(order.getAmount()));
 
@@ -533,9 +532,9 @@ public class OrderBook
             .orderId(order.getOrderId())
             .productId(order.getProductId())
             .userId(order.getUserId())
-            .orderStatus(order.getOrderStatus())
-            .orderType(order.getOrderType())
-            .side(order.getSide())
+            .orderStatus(exchange.lob.api.sbe.OrderStatus.get(order.getOrderStatus().value()))
+            .orderType(exchange.lob.api.sbe.OrderType.get(order.getOrderType().value()))
+            .side(exchange.lob.api.sbe.Side.get(order.getSide().value()))
             .price(order.getPrice())
             .amount(order.getAmount()));
     }
@@ -552,10 +551,16 @@ public class OrderBook
             return false;
         }
         final OrderBook orderBook = (OrderBook)o;
-        return productId == orderBook.productId && Objects.equals(bids, orderBook.bids) && Objects.equals(asks, orderBook.asks) && Objects.equals(orders,
-            orderBook.orders) && Objects.equals(ordersByClientOrderId, orderBook.ordersByClientOrderId) && Objects.equals(liquidityCache,
-            orderBook.liquidityCache) && Objects.equals(currentOrderId, orderBook.currentOrderId) && Objects.equals(currentExecutionId,
-            orderBook.currentExecutionId);
+        return productId == orderBook.productId && Objects.equals(bids, orderBook.bids) && Objects.equals(asks, orderBook.asks) && Objects.equals(
+            orders,
+            orderBook.orders
+        ) && Objects.equals(ordersByClientOrderId, orderBook.ordersByClientOrderId) && Objects.equals(
+            liquidityCache,
+            orderBook.liquidityCache
+        ) && Objects.equals(currentOrderId, orderBook.currentOrderId) && Objects.equals(
+            currentExecutionId,
+            orderBook.currentExecutionId
+        );
     }
 
     @Override

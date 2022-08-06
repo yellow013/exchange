@@ -1,6 +1,6 @@
 package exchange.lob.match;
 
-import exchange.lob.api.codecs.internal.Side;
+import exchange.lob.domain.Side;
 import it.unimi.dsi.fastutil.objects.ObjectRBTreeSet;
 
 import java.util.Objects;
@@ -28,7 +28,7 @@ public class LiquidityCache
         return new LiquidityCache(bidLiquidity, askLiquidity);
     }
 
-    public void onLiquidityIncrease(Side side, long amount)
+    public void onLiquidityIncrease(final Side side, long amount)
     {
         switch (side)
         {

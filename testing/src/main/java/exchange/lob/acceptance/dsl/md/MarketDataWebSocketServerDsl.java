@@ -4,7 +4,7 @@ import com.lmax.simpledsl.DslParams;
 import com.lmax.simpledsl.OptionalParam;
 import com.lmax.simpledsl.RequiredParam;
 import exchange.lob.acceptance.TestStorage;
-import exchange.lob.api.codecs.internal.Side;
+import exchange.lob.api.sbe.Side;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

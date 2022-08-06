@@ -1,9 +1,9 @@
 package exchange.lob.risk;
 
-import exchange.lob.api.codecs.internal.ExchangeStateDecoder;
-import exchange.lob.api.codecs.internal.ExchangeStateEncoder;
-import exchange.lob.api.codecs.internal.OrderType;
-import exchange.lob.api.codecs.internal.Side;
+import exchange.lob.api.sbe.ExchangeStateDecoder;
+import exchange.lob.api.sbe.ExchangeStateEncoder;
+import exchange.lob.domain.OrderType;
+import exchange.lob.domain.Side;
 import exchange.lob.events.trading.NoOpOrderBookEvents;
 import exchange.lob.product.Asset;
 import exchange.lob.product.Product;

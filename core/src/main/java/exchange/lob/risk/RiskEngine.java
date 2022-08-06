@@ -1,11 +1,11 @@
 package exchange.lob.risk;
 
-import exchange.lob.api.codecs.internal.ExchangeStateDecoder;
-import exchange.lob.api.codecs.internal.ExchangeStateEncoder;
-import exchange.lob.api.codecs.internal.OrderType;
-import exchange.lob.api.codecs.internal.Side;
+import exchange.lob.api.sbe.ExchangeStateDecoder;
+import exchange.lob.api.sbe.ExchangeStateEncoder;
 import exchange.lob.domain.ExchangeResponseCode;
+import exchange.lob.domain.OrderType;
 import exchange.lob.domain.RejectionReason;
+import exchange.lob.domain.Side;
 import exchange.lob.events.trading.OrderBookEvents;
 import exchange.lob.match.execution.ExecutionReport;
 import exchange.lob.node.Stateful;
@@ -132,7 +132,7 @@ public class RiskEngine
                 executionIdSupplier.getAsLong(),
                 product.getSymbol(),
                 userId,
-                exchange.lob.domain.Side.fromSbe(side),
+                exchange.lob.domain.Side.get(side.value()),
                 RejectionReason.INSUFFICIENT_BALANCE
             );
             return Long.MIN_VALUE;

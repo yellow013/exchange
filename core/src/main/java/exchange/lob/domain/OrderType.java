@@ -14,25 +14,25 @@ import static java.util.stream.Collectors.toMap;
 public enum OrderType implements Encodable
 {
 
-    LMT('1'),
-    MKT('2'),
-    NULL_VAL('3');
+    LMT((short)1),
+    MKT((short)2),
+    NULL_VAL((short)255);
 
-    private static final Map<Character, OrderType> VALUES = Arrays.stream(values()).collect(toMap(OrderType::value, Function.identity()));
+    private static final Map<Short, OrderType> VALUES = Arrays.stream(values()).collect(toMap(OrderType::value, Function.identity()));
 
-    private final char value;
+    private final short value;
 
-    OrderType(final char value)
+    OrderType(final short value)
     {
         this.value = value;
     }
 
-    public char value()
+    public short value()
     {
         return value;
     }
 
-    public static OrderType get(final char value)
+    public static OrderType get(final short value)
     {
         final OrderType orderType = VALUES.get(value);
 
@@ -53,17 +53,7 @@ public enum OrderType implements Encodable
     @DecodedBy
     public static OrderType decode(final BufferDecoder bufferDecoder)
     {
-        final char value = bufferDecoder.decodeChar();
+        final short value = bufferDecoder.decodeShort();
         return OrderType.get(value);
-    }
-
-    public exchange.lob.api.codecs.internal.OrderType toSbe()
-    {
-        return switch (this)
-            {
-                case LMT -> exchange.lob.api.codecs.internal.OrderType.LMT;
-                case MKT -> exchange.lob.api.codecs.internal.OrderType.MKT;
-                case NULL_VAL -> exchange.lob.api.codecs.internal.OrderType.NULL_VAL;
-            };
     }
 }

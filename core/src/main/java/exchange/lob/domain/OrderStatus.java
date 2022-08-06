@@ -13,46 +13,33 @@ import static java.util.stream.Collectors.toMap;
 
 public enum OrderStatus implements Encodable
 {
-    NEW('1'),
+    NEW((short)1),
 
-    FILLED('2'),
+    FILLED((short)2),
 
-    PARTIALLY_FILLED('3'),
+    PARTIALLY_FILLED((short)3),
 
-    REJECTED('4'),
+    REJECTED((short)4),
 
-    CANCELLED('5'),
+    CANCELLED((short)5),
 
-    NULL_VAL('6');
+    NULL_VAL((short)255);
 
-    private static final Map<Character, OrderStatus> VALUES = Arrays.stream(values()).collect(toMap(OrderStatus::value, Function.identity()));
+    private static final Map<Short, OrderStatus> VALUES = Arrays.stream(values()).collect(toMap(OrderStatus::value, Function.identity()));
 
-    private final char value;
+    private final short value;
 
-    OrderStatus(final char value)
+    OrderStatus(final short value)
     {
         this.value = value;
     }
 
-    public static OrderStatus fromSbe(final exchange.lob.api.codecs.internal.OrderStatus makerOrderStatus)
-    {
-        return switch (makerOrderStatus)
-            {
-                case NEW -> NEW;
-                case FILLED -> FILLED;
-                case REJECTED -> REJECTED;
-                case CANCELLED -> CANCELLED;
-                case PARTIALLY_FILLED -> PARTIALLY_FILLED;
-                case NULL_VAL -> NULL_VAL;
-            };
-    }
-
-    public char value()
+    public short value()
     {
         return value;
     }
 
-    public static OrderStatus get(final char value)
+    public static OrderStatus get(final short value)
     {
         final OrderStatus orderStatus = VALUES.get(value);
 
@@ -73,7 +60,7 @@ public enum OrderStatus implements Encodable
     @DecodedBy
     public static OrderStatus decode(final BufferDecoder bufferDecoder)
     {
-        final char value = bufferDecoder.decodeChar();
+        final short value = bufferDecoder.decodeShort();
         return OrderStatus.get(value);
     }
 }

@@ -2,7 +2,7 @@ package exchange.lob.acceptance.dsl.md;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
-import exchange.lob.api.codecs.internal.Side;
+import exchange.lob.api.sbe.Side;
 import exchange.lob.md.dto.OrderCanceledUpdate;
 import exchange.lob.md.dto.OrderPlacedUpdate;
 import exchange.lob.md.dto.TradeUpdate;

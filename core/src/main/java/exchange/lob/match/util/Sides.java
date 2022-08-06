@@ -17,13 +17,13 @@ public class Sides
             };
     }
 
-    public static exchange.lob.api.codecs.internal.Side other(final exchange.lob.api.codecs.internal.Side side)
+    public static exchange.lob.api.sbe.Side other(final exchange.lob.api.sbe.Side side)
     {
         return switch (side)
             {
-                case BID -> exchange.lob.api.codecs.internal.Side.ASK;
-                case ASK -> exchange.lob.api.codecs.internal.Side.BID;
-                case NULL_VAL -> exchange.lob.api.codecs.internal.Side.NULL_VAL;
+                case BID -> exchange.lob.api.sbe.Side.ASK;
+                case ASK -> exchange.lob.api.sbe.Side.BID;
+                case NULL_VAL -> exchange.lob.api.sbe.Side.NULL_VAL;
             };
     }
 }

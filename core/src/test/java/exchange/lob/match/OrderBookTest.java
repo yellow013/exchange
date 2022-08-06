@@ -1,8 +1,8 @@
 package exchange.lob.match;
 
-import exchange.lob.api.codecs.internal.OrderStatus;
-import exchange.lob.api.codecs.internal.OrderType;
-import exchange.lob.api.codecs.internal.Side;
+import exchange.lob.domain.OrderStatus;
+import exchange.lob.domain.OrderType;
+import exchange.lob.domain.Side;
 import exchange.lob.events.trading.NoOpOrderBookEvents;
 import exchange.lob.match.execution.ExecutionSettler;
 import exchange.lob.product.Asset;
