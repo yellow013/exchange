@@ -22,8 +22,4 @@
         <type name="length" primitiveType="uint32" maxValue="1073741824"/>
         <type name="varData" primitiveType="uint8" length="0"/>
     </composite>
-    <composite name="Decimal" description="fixed-precision scaled float">
-        <type name="value" primitiveType="int64"/>
-        <type name="scale" primitiveType="uint8"/>
-    </composite>
 </types>
