@@ -107,7 +107,7 @@ public class RiskEngine
         return balances.get(userId);
     }
 
-    public long reserveBalance(
+    public long reservePreOrderBalance(
         final long correlationId,
         final String clientOrderId,
         final long userId,

@@ -78,7 +78,7 @@ public class TradingRequestProcessor implements TradingRequests
         final long unscaledPrice = toMinorUnits(price, product.getCounterAsset().getScale());
         final long unscaledAmount = toMinorUnits(amount, product.getBaseAsset().getScale());
 
-        final long reservedBalance = riskEngine.reserveBalance(
+        final long reservedBalance = riskEngine.reservePreOrderBalance(
             correlationId,
             clientOrderId,
             user.getUserId(),
@@ -90,7 +90,7 @@ public class TradingRequestProcessor implements TradingRequests
             matchingEngine::newExecutionId
         );
 
-        if (reservedBalance != Long.MIN_VALUE)
+        if (passedPreTradeRiskChecks(reservedBalance))
         {
             matchingEngine.handleOrderPlacement(
                 correlationId,
@@ -105,6 +105,11 @@ public class TradingRequestProcessor implements TradingRequests
                 riskEngine::settleExecutionReports
             );
         }
+    }
+
+    private static boolean passedPreTradeRiskChecks(final long reservedBalance)
+    {
+        return reservedBalance != Long.MIN_VALUE;
     }
 
     @Override

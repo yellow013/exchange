@@ -38,6 +38,6 @@ public class RiskEngineHelper
         long amount
     )
     {
-        return riskEngine.reserveBalance(ANY_CORRELATION_ID, "clientOrderId", userId, product, orderType, side, price, amount, () -> 10L);
+        return riskEngine.reservePreOrderBalance(ANY_CORRELATION_ID, "clientOrderId", userId, product, orderType, side, price, amount, () -> 10L);
     }
 }
