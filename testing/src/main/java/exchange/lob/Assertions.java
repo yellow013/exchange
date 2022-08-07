@@ -63,7 +63,7 @@ public class Assertions
 
     public static void assertEventually(final ThrowingRunnable runnable)
     {
-        assertEventually(runnable, Duration.ofSeconds(30));
+        assertEventually(runnable, Duration.ofSeconds(5));
     }
 
     public static void assertEventually(final ThrowingRunnable runnable, final Duration timeout)
