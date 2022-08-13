@@ -7,6 +7,7 @@ import exchange.lob.admin.dto.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static exchange.lob.Assertions.assertEventually;
 import static exchange.lob.Assertions.assertReflectiveContainsAll;
@@ -248,9 +249,15 @@ public class AdminApiDsl
                 group -> group.valueAsDouble("amount")
             ));
 
+        final Set<Map.Entry<String, Double>> actualUserBalances = adminApiDriver
+            .sendGetUserBalancesRequest(userId, expectedStatusCode)
+            .balances
+            .entrySet();
+
+        // FIXME: assertReflectiveContainsAll is an artifact of retaining asset symbols between tests - this does not reflect the actual usage of the system
         assertEventually(() -> assertReflectiveContainsAll(
             expectedUserBalances.entrySet(),
-            adminApiDriver.sendGetUserBalancesRequest(userId, expectedStatusCode).balances.entrySet()
+            actualUserBalances
         ));
     }
 

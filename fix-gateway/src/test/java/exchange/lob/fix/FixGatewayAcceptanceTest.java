@@ -2,6 +2,7 @@ package exchange.lob.fix;
 
 import exchange.lob.acceptance.AcceptanceTestCase;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class FixGatewayAcceptanceTest extends AcceptanceTestCase
@@ -203,6 +204,7 @@ public class FixGatewayAcceptanceTest extends AcceptanceTestCase
     }
 
     @Test
+    @DisplayName("E2E order placement, matching and risk")
     public void shouldMatchLimitAndMarketOrderAndReturnExecutionReports()
     {
         admin.addUser("username: maker", "password: strongPassword");
@@ -211,15 +213,45 @@ public class FixGatewayAcceptanceTest extends AcceptanceTestCase
         admin.addAsset("symbol: BTC", "scale: 8");
         admin.addAsset("symbol: USD", "scale: 2");
 
-        admin.addProduct("baseAsset: BTC", "counterAsset: USD", "makerFee: -10", "takerFee: 10");
+        admin.addProduct("baseAsset: BTC", "counterAsset: USD", "makerFee: -10", "takerFee: 20");
 
         admin.updateBalance("username: maker", "asset: BTC", "amount: 10");
         admin.updateBalance("username: taker", "asset: USD", "amount: 20000");
+
+        admin.verifyBalances(
+            "maker",
+            "asset: BTC", "amount: 10",
+            "asset: USD", "amount: 0"
+        );
+
+        admin.verifyBalances(
+            "taker",
+            "asset: BTC", "amount: 0",
+            "asset: USD", "amount: 20000"
+        );
+
+        admin.verifyBalances(
+            "EXCHANGE",
+            "asset: BTC", "amount: 0",
+            "asset: USD", "amount: 0"
+        );
 
         fix.login("maker", "strongPassword");
         fix.login("taker", "strongPassword");
 
         fix("maker").placeOrder("clientOrderId: limitAsk", "product: BTCUSD", "ordType: Limit", "side: Sell", "price: 10000.00", "orderQty: 1");
+
+        admin.verifyBalances(
+            "maker",
+            "asset: BTC", "amount: 9",
+            "asset: USD", "amount: 0"
+        );
+
+        admin.verifyBalances(
+            "EXCHANGE",
+            "asset: BTC", "amount: 0",
+            "asset: USD", "amount: 0"
+        );
 
         fix("maker").verifyExecutionReport(
             "clientOrderId: limitAsk", "product: BTCUSD", "ordStatus: New", "execType: New", "side: Sell", "price: 10000", "orderQty: 1"
@@ -235,6 +267,24 @@ public class FixGatewayAcceptanceTest extends AcceptanceTestCase
             "clientOrderId: mktBid", "product: BTCUSD", "ordStatus: Filled", "execType: Trade", "side: Buy", "price: 10000", "orderQty: 1"
         );
 
+        admin.verifyBalances(
+            "maker",
+            "asset: BTC", "amount: 9.001",
+            "asset: USD", "amount: 10000"
+        );
+
+        admin.verifyBalances(
+            "taker",
+            "asset: BTC", "amount: 0.998",
+            "asset: USD", "amount: 10000"
+        );
+
+        admin.verifyBalances(
+            "EXCHANGE",
+            "asset: BTC", "amount: 0.001",
+            "asset: USD", "amount: 0"
+        );
+
         fix("maker").noMoreExecutionReports();
         fix("taker").noMoreExecutionReports();
     }
@@ -247,6 +297,7 @@ public class FixGatewayAcceptanceTest extends AcceptanceTestCase
         admin.addAsset("symbol: USD", "scale: 2");
         admin.addProduct("baseAsset: BTC", "counterAsset: USD", "makerFee: -10", "takerFee: 10");
         admin.updateBalance("username: trader", "asset: BTC", "amount: 1");
+        admin.verifyBalances("trader", "asset: BTC", "amount: 1");
 
         fix.login("trader", "strongPassword");
 
@@ -259,11 +310,15 @@ public class FixGatewayAcceptanceTest extends AcceptanceTestCase
             "orderQty: 1"
         );
 
+        admin.verifyBalances("trader", "asset: BTC", "amount: 0");
+
         fix("trader").verifyExecutionReport(
             "clientOrderId: limitAsk", "product: BTCUSD", "ordStatus: New", "execType: New", "side: Sell", "price: 10000", "orderQty: 1"
         );
 
         fix("trader").cancelOrder("clientOrderId: limitAsk", "product: BTCUSD", "orderQty: 1");
+
+        admin.verifyBalances("trader", "asset: BTC", "amount: 1");
 
         fix("trader").verifyExecutionReport(
             "clientOrderId: limitAsk", "product: BTCUSD", "ordStatus: Cancelled", "execType: Cancelled", "side: Sell", "price: 10000", "orderQty: 1"
